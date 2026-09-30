@@ -1,0 +1,8 @@
+{
+  "scale": { "resourceCount": 100, "queryCount": 20, "repetitions": 5 },
+  "profiles": ["static", "semantic-only", "trust-aware"],
+  "faults": ["none", "inactive", "revoked", "unauthorized", "hash-mismatch", "unreachable", "superseded"],
+  "seed": 20261001,
+  "networkProfile": "local-baseline",
+  "discovery": { "provider": "deterministic", "model": "offline-test", "dimension": 8 }
+}

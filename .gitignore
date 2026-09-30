@@ -5,3 +5,8 @@ results/*
 !results/.gitkeep
 configs/local.json
 *.log
+__pycache__/
+*.pyc
+!results/*/comparison-summary.csv
+!results/*/*.png
+!results/*/*.pdf

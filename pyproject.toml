@@ -2,7 +2,9 @@
 name = "experiments-trust-aware-discovery"
 version = "0.1.0"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = ["matplotlib>=3.11,<4"]
 
 [project.scripts]
 oan-discovery-batch = "runners.batch:main"
+oan-discovery-summarize = "analysis.summarize:main"
+oan-discovery-plot = "analysis.plot_results:main"
