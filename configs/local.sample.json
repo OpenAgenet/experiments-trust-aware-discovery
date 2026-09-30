@@ -1,0 +1,17 @@
+{
+  "endpoints": {
+    "registrar": "http://127.0.0.1:REGISTRAR_PORT",
+    "root": "http://127.0.0.1:ROOT_PORT",
+    "cdn": "http://127.0.0.1:CDN_PORT",
+    "publisher": "http://127.0.0.1:PUBLISHER_PORT",
+    "discovery": "http://127.0.0.1:DISCOVERY_PORT",
+    "embedding": "http://127.0.0.1:EMBEDDING_PORT"
+  },
+  "scale": { "resourceCount": 1, "queryCount": 1, "repetitions": 1 },
+  "discovery": { "provider": "deterministic", "model": "offline-test", "dimension": 8 },
+  "networkProfile": "local-baseline",
+  "strategies": ["static", "semantic-only", "trust-aware"],
+  "seed": 20261001,
+  "timeoutsMs": { "request": 10000, "lifecycle": 60000 },
+  "auth": { "genesisDir": "../oan-design-docs/genesis/nodes", "trustIndexer": false }
+}

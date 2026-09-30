@@ -1,0 +1,26 @@
+{
+  "profiles": [
+    {
+      "id": "static",
+      "semanticRetrieval": false,
+      "trustGate": false,
+      "packageFetch": false,
+      "ranking": "resourceType-name"
+    },
+    {
+      "id": "semantic-only",
+      "semanticRetrieval": true,
+      "trustGate": false,
+      "packageFetch": false,
+      "ranking": "discovery-score"
+    },
+    {
+      "id": "trust-aware",
+      "semanticRetrieval": true,
+      "trustGate": true,
+      "packageFetch": true,
+      "ranking": "eligible-score"
+    }
+  ],
+  "pairedFactors": ["querySet", "seed", "networkProfile", "resourceFixture", "repetitions"]
+}

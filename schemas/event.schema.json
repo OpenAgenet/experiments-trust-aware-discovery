@@ -1,0 +1,1 @@
+{"type":"object","required":["runId","caseId","stage","timestamp"],"properties":{"runId":{"type":"string"},"caseId":{"type":"string"},"stage":{"type":"string"},"timestamp":{"type":"string","format":"date-time"},"strategy":{"type":"string"},"resourceDid":{"type":"string"},"queryId":{"type":"string"},"failureCode":{"type":["string","null"]}}}
