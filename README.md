@@ -73,9 +73,9 @@ unavailable service and never falls back to an emulation result.
 npm install
 $env:OAN_WORKSPACE_ROOT="D:\\Works\\VscodeProject\\OAN"
 $env:OAN_NATS_SERVER_PATH="C:\\Program Files\\WinGet\\Links\\nats-server.exe"
-$env:OAN_DISCOVERY_RESOURCES="2000"
-npm run run:real -- --output results/real-oan-local-2000
-python analysis/analyze_real.py --input results/real-oan-local-2000
+$env:OAN_DISCOVERY_RESOURCES="200"
+npm run run:real -- --output results/real-oan-local-200
+python analysis/analyze_real.py --input results/real-oan-local-200
 ```
 
 The runner registers resources through Registrar, waits for Root acceptance,
@@ -95,7 +95,7 @@ The comparison switches are defined in `configs/comparison-profiles.json`.
 npm install
 npm run probe -- --config configs/local.json
 npm run run:discovery -- --config configs/local.json
-npm run analyze:real -- --input results/real-oan-local-2000
+npm run analyze:real -- --input results/real-oan-local-200
 ```
 
 ## Outputs

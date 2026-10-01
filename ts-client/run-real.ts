@@ -15,7 +15,9 @@ const outputIndex = process.argv.indexOf("--output");
 const positional = process.argv.slice(2).find((value) => !value.startsWith("-"));
 const out = path.resolve(outputIndex >= 0 && process.argv[outputIndex + 1] ? process.argv[outputIndex + 1] : (positional ?? "results/real-oan-local"));
 console.log(`experiment lifecycle: ${lifecycleStages().join(" -> ")}`);
-const count = Number(process.env.OAN_DISCOVERY_RESOURCES ?? "2000");
+const count = Number(process.env.OAN_DISCOVERY_RESOURCES ?? "200");
+const profile = process.env.OAN_DISCOVERY_PROFILE ?? "trust-aware";
+if (!["static", "semantic-only", "trust-aware"].includes(profile)) throw new Error("OAN_DISCOVERY_PROFILE must be static, semantic-only, or trust-aware");
 const runStamp = Date.now().toString();
 const work = path.join(localOan, ".local-oan-topology", runStamp);
 const pidDir = path.join(localOan, ".local-oan-pids", runStamp);
@@ -45,8 +47,8 @@ try {
   }
   await shared.waitForRootLatestVersionCount(rootUrl,count,600000); await flows.waitForRootEventPublish(rootUrl,count,600000); await flows.waitForPublisherAck("http://127.0.0.1:8110",count,600000); await flows.waitForCdnResourceCount("http://127.0.0.1:8105",count,600000); const sync=await flows.waitForDiscoveryIndexedCount(discUrl,count,600000);
   const queries=["cloud detection satellite edge service","anomaly detection satellite edge service","earth observation telemetry resource","edge computing resource"];
-  const queryRows:any[]=[]; for (let rep=0;rep<5;rep++) for (const q of queries) { const t0=Date.now(); const response=await shared.postJson(`${discUrl}/discovery/resources/query`,{query:q,limit:10}); const candidates=response.candidates??response.items??[]; queryRows.push({repetition:rep,query:q,latencyMs:Date.now()-t0,candidateCount:candidates.length,mode:"real-oan-local"}); }
-  const manifest={runId:`paper1-real-${Date.now()}`,mode:"real-oan-local",coreEndpointMode:"connected",databaseBackend:"sqlite",trustIndexer:false,coreIntegration:integrationSummary(),resourceCount:count,registeredCount:rows.length,discoveryIndexedCount:sync.indexedResourceCount,registrarEndpoint:regUrl,rootEndpoint:rootUrl,discoveryEndpoint:discUrl,cdnEndpoint:"http://127.0.0.1:8105",generatedAt:new Date().toISOString()};
+  const queryRows:any[]=[]; for (let rep=0;rep<5;rep++) for (const q of queries) { const t0=Date.now(); const request = profile === "static" ? {query:"",limit:10} : {query:q,limit:10}; const response=await shared.postJson(`${discUrl}/discovery/resources/query`,request); let candidates=response.candidates??response.items??[]; let packageChecks=0; if (profile === "trust-aware") { for (const candidate of candidates.slice(0, 3)) { const did=encodeURIComponent(candidate.resourceDid ?? candidate.resource_did ?? ""); if (!did) continue; const packageResponse=await fetch(`http://127.0.0.1:8105/cdn/resources/${did}`); if (packageResponse.ok) packageChecks++; } } if (profile === "static") candidates=[...candidates].sort((a:any,b:any)=>String(a.resourceDid??a.resource_did).localeCompare(String(b.resourceDid??b.resource_did))); queryRows.push({repetition:rep,query:q,profile,latencyMs:Date.now()-t0,candidateCount:candidates.length,packageChecks,mode:"real-oan-local"}); }
+  const manifest={runId:`paper1-${profile}-${Date.now()}`,profile,mode:"real-oan-local",coreEndpointMode:"connected",databaseBackend:"sqlite",trustIndexer:false,coreIntegration:integrationSummary(),resourceCount:count,registeredCount:rows.length,discoveryIndexedCount:sync.indexedResourceCount,registrarEndpoint:regUrl,rootEndpoint:rootUrl,discoveryEndpoint:discUrl,cdnEndpoint:"http://127.0.0.1:8105",generatedAt:new Date().toISOString()};
   fs.writeFileSync(path.join(out,"run-manifest.json"),JSON.stringify(manifest,null,2)); fs.writeFileSync(path.join(out,"registration-latency.json"),JSON.stringify(rows)); fs.writeFileSync(path.join(out,"query-results.json"),JSON.stringify(queryRows,null,2)); fs.writeFileSync(path.join(out,"events.jsonl"),events.map(x=>JSON.stringify(x)).join("\n")+"\n"); assertRealManifest(manifest); console.log(JSON.stringify(manifest,null,2));
  } finally { for (const n of [...started].reverse()) await shared.stopNode(n); await shared.stopNats(nats); }
 

@@ -1,5 +1,5 @@
 {
-  "scale": { "resourceCount": 2000, "queryCount": 20, "repetitions": 5 },
+  "scale": { "resourceCount": 200, "queryCount": 20, "repetitions": 5 },
   "profiles": ["static", "semantic-only", "trust-aware"],
   "faults": ["none", "inactive", "revoked", "unauthorized", "hash-mismatch", "unreachable", "superseded"],
   "seed": 20261001,
