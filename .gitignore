@@ -7,6 +7,9 @@ configs/local.json
 *.log
 __pycache__/
 *.pyc
+local-oan/.local-oan-topology/
+local-oan/.local-oan-pids/
 !results/*/comparison-summary.csv
 !results/*/*.png
 !results/*/*.pdf
+local-oan/.dependency-audit-topology/

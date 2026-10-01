@@ -5,7 +5,9 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "probe": "tsx ts-client/src/probe.ts",
-    "run:discovery": "tsx ts-client/src/run-discovery.ts"
+    "run:discovery": "tsx ts-client/src/run-discovery.ts",
+    "run:real": "tsx ts-client/run-real.ts",
+    "analyze:real": "python analysis/analyze_real.py"
   },
   "dependencies": { "@openagenet/oan-sdk-ts": "file:../oan-sdk-ts" },
   "devDependencies": { "@types/node": "^22.0.0", "tsx": "^4.21.0", "typescript": "^6.0.3" }
